@@ -1,4 +1,6 @@
 from part_4_buffer import Buffer
+import sys
+from tqdm import tqdm
 
 # states for CN
 # states = [
@@ -15,11 +17,7 @@ states = [
 iteration = 80
 TOP_train = 1
 TOP_predict = 1
-CLEAN_DATA = False
 
-# SET THIS TO FALSE FOR DEV
-TEST = True
-print("TEST", TEST)
 
 
 def viterbi(k, transition, emission, words):
@@ -115,36 +113,41 @@ def perceptron(tag_predictions, tags, words, transition, emission):
 
 
 # need to consider different marks
-def remove_marks(word):
+def remove_marks(word, clean=True):
     marks = {'@', '#', '-'}
-    if CLEAN_DATA:
+    if clean:
         if word[:7] == 'http://':
             return "THIS IS A URL"
         return word
     else:
         return word
 
-
-# start the main process here
-print("Start Training....")
-
-# can add different file folder to the list
-# need to change the language list
-for language in ['Test']:
+if __name__ == "__main__":
+    # start the main process here
+    mode_list = ['EN', 'test']
+    if len(sys.argv) < 2:
+        print ('Please make sure you have installed Python 3.4 or above!')
+        print ("python part5.py <N>")
+        print ("N=0: EN; N=1: test")
+        sys.exit()
+    mode = int(sys.argv[1])
+    if mode < 0 or mode > 1:
+        print ("Please input valid mode number!") 
+        sys.exit()
+    language = mode_list[mode]
+    # can add different file folder to the list
+    # need to change the language list
     print(language)
-    train_file = open("/Users/huaihaizi/Desktop/Term6/ML/Project/" + language +
-                      "/train",
-                      encoding='utf8')
+    train_file = open(language +
+                    "/train",
+                    encoding='utf8')
     # when the test file is coming will update here
-    if TEST:
-        print(1)
-        test_file = open("/Users/huaihaizi/Desktop/Term6/ML/Project/" +
-                         language + "/test.in",
-                         encoding='utf8')
+    if mode==1:
+        test_file = open(language + "/test.in",
+                        encoding='utf8')
     else:
-        test_file = open("/Users/huaihaizi/Desktop/Term6/ML/Project/" +
-                         language + "/dev.in",
-                         encoding='utf8')
+        test_file = open(language + "/dev.in",
+                        encoding='utf8')
 
     transition = {}
     for state in states:
@@ -213,18 +216,18 @@ for language in ['Test']:
     cleaned_test_word_data.pop()
 
     ##train
-    for i in range(iteration):
+    for i in tqdm(range(iteration)):
         for j in range(len(train_tag_data)):
             prediction = viterbi(TOP_train, transition, emission,
-                                 cleaned_train_word_data[j])
+                                cleaned_train_word_data[j])
             transition, emission = perceptron(prediction, train_tag_data[j],
-                                              cleaned_train_word_data[j],
-                                              transition, emission)
+                                            cleaned_train_word_data[j],
+                                            transition, emission)
     #write each entry as a message
     message = ''
     for i in range(len(test_word_data)):
         prediction = viterbi(TOP_predict, transition, emission,
-                             cleaned_test_word_data[i])
+                            cleaned_test_word_data[i])
         for j in range(len(test_word_data[i])):
             message += test_word_data[i][j]
             message += ' '
@@ -232,16 +235,16 @@ for language in ['Test']:
             message += '\n'
         message += '\n'
 
-    if TEST:
+    if mode==1:
         result = open(
-            "/Users/huaihaizi/Desktop/Term6/ML/Project/" + language +
+            language +
             "/test.out", "wb")
     else:
         result = open(
-            "/Users/huaihaizi/Desktop/Term6/ML/Project/" + language +
+            language +
             "/dev.p5.out", "wb")
 
     result.write(message.encode("utf-8"))
     result.close()
 
-print("Done")
+    print("Done")

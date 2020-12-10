@@ -103,8 +103,14 @@ def main_process(mode):
 
 
 if __name__ == "__main__":
-    print("Hello gemao")
-    mode_list = ['EN', 'CN', 'SG']
-    # # for i in range(len(mode_list)):
-    # #     main_process(mode_list[i])
-    main_process(mode_list[0])
+    mode_list = ['EN', 'CN', 'SG','test']
+    if len(sys.argv) < 2:
+        print ('Please make sure you have installed Python 3.4 or above!')
+        print ("python part4.py <N>")
+        print ("N=0: EN; N=1: CN; N=2: SG; N=3: test")
+        sys.exit()
+
+    mode = int(sys.argv[1])
+    if mode < 0 or mode > 3:
+        print ("Please input valid mode number!") 
+    main_process(mode_list[mode])

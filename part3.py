@@ -2,11 +2,12 @@ from os.path import dirname
 import numpy as np
 from numpy.core.defchararray import count, index
 from numpy.core.fromnumeric import argmax
-from numpy.core.numeric import load
+# from numpy.core.numeric import load
 import pandas as pd
 import os
 from tqdm import tqdm
 import pickle
+import sys
 
 
 def load_data(filepath, tag=True):
@@ -106,7 +107,7 @@ def calCountEmi(data, tokenOcc, tagOcc, k=0.5):
             curTag = data['tag'][i]
             EmiTable[curTag][curToken] += 1
     # emission parameter = count(y->x)/count(y)
-    emiTable = EmiTable.divide(tagOcc, axis=1).fillna(0)
+    emiTable = EmiTable.divide(tagOcc+k, axis=1).fillna(0)
     # After doing division, we seperarely calculate e('#UNK#'|y), k=0.5
     for i in tagOcc.index.values:
         emiTable[i]['#UNK#'] = k/(tagOcc[i]+k)
@@ -279,10 +280,15 @@ def main_process(mode):
 
 
 if __name__ == "__main__":
-    print("Hello World")
     mode_list = ['EN', 'CN', 'SG','test']
-    main_process(mode_list[3])
-    # for i in range(len(mode_list)):
-    #     main_process(mode_list[i])
+    if len(sys.argv) < 2:
+        print ('Please make sure you have installed Python 3.4 or above!')
+        print ("python part3.py <N>")
+        print ("N=0: EN; N=1: CN; N=2: SG; N=3: test")
+        sys.exit()
 
-
+    mode = int(sys.argv[1])
+    if mode < 0 or mode > 3:
+        print ("Please input valid mode number!") 
+        sys.exit()
+    main_process(mode_list[mode])
