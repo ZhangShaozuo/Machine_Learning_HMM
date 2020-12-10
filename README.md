@@ -27,7 +27,7 @@ To run part 3 in console:
 # N=3 -> test
 python part3.py <N>
 ```
-The output file can be found in folder ***(EN, CN, SG, test)/part3***.
+The output file *dev.p3.out* can be found in folder ***(EN, CN, SG, test)/part3***.
 
 
 ## Part 4
@@ -42,7 +42,7 @@ To run part 4 in console:
 # N=3 -> test
 python part4.py <N>
 ```
-The output file can be found in folder ***(EN, CN, SG, test)***.
+The output file *dev.p4.out* can be found in folder ***(EN, CN, SG, test)***.
 
 ## Part 5
 
@@ -54,4 +54,4 @@ To run part 5 in console:
 # N=1 -> test
 python part5.py <N>
 ```
-The output file can be found in folder ***(EN, test)***.
+The output file *test.out* or *dev.p5.out* can be found in folder ***(EN, test)***.
