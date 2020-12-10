@@ -114,10 +114,9 @@ def perceptron(tag_predictions, tags, words, transition, emission):
 
 # need to consider different marks
 def remove_marks(word, clean=True):
-    marks = {'@', '#', '-'}
     if clean:
         if word[:7] == 'http://':
-            return "THIS IS A URL"
+            return "URL"
         return word
     else:
         return word
