@@ -248,11 +248,17 @@ def write_pred(tag_list, inpath='EN\\dev.in', predpath='EN\\dev.predict'):
 
 def main_process(mode):
     trainpath = mode+'\\train'
-    testpath = mode+'\\dev.in'
-    predpath = mode+'\\dev.p3.out'
-    tranTable_savepath = mode+'\\tranTable.csv'
-    emiTable_savepath = mode+'\\emiTable.csv'
-    tag_savepath = mode+'\\tag.txt'
+    if mode == 'test':
+        testpath = mode+ '\\test.in'
+    else:
+        testpath = mode+'\\dev.in'
+    output_dir = mode+'\\part3'
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    predpath = output_dir+'\\dev.p3.out'
+    tranTable_savepath = output_dir+'\\tranTable.csv'
+    emiTable_savepath = output_dir+'\\emiTable.csv'
+    tag_savepath = output_dir+'\\tag.txt'
     data, tokenOcc, tagOcc = load_data(trainpath)
     tranTable = calCountTran(data, tagOcc)
     tranTable.to_csv(tranTable_savepath)
@@ -266,15 +272,17 @@ def main_process(mode):
     # # save the tag in a file
     with open(tag_savepath, 'wb') as fp:
         pickle.dump(tag_list, fp)
+    ## If you don't want to train again, use these 2 lines to load the tag_list 
     # with open(tag_savepath,'rb') as fp:
     #     tag_list=pickle.load(fp)
     write_pred(tag_list, testpath, predpath)
 
 
 if __name__ == "__main__":
-    print("Hello gemao")
-    mode_list = ['EN', 'CN', 'SG']
-    # # for i in range(len(mode_list)):
-    # #     main_process(mode_list[i])
-    main_process(mode_list[2])
+    print("Hello World")
+    mode_list = ['EN', 'CN', 'SG','test']
+    main_process(mode_list[3])
+    # for i in range(len(mode_list)):
+    #     main_process(mode_list[i])
+
 
