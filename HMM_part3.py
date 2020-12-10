@@ -106,7 +106,7 @@ def calCountEmi(data, tokenOcc, tagOcc, k=0.5):
             curTag = data['tag'][i]
             EmiTable[curTag][curToken] += 1
     # emission parameter = count(y->x)/count(y)
-    emiTable = EmiTable.divide(tagOcc, axis=1).fillna(0)
+    emiTable = EmiTable.divide(tagOcc+k, axis=1).fillna(0)
     # After doing division, we seperarely calculate e('#UNK#'|y), k=0.5
     for i in tagOcc.index.values:
         emiTable[i]['#UNK#'] = k/(tagOcc[i]+k)
